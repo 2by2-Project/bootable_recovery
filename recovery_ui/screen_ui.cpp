@@ -525,14 +525,20 @@ void ScreenRecoveryUI::SetColor(UIElement e) const {
       gr_color(0x00, 0xf9, 0x00, 255);
       break;
     case UIElement::INFO:
-      gr_color(249, 194, 0, 255);
+      if (fastbootd_logo_enabled_)
+        gr_color(255, 166, 77, 255);
+      else
+        gr_color(77, 127, 255, 255);
       break;
     case UIElement::HEADER:
       gr_color(247, 0, 6, 255);
       break;
     case UIElement::MENU:
     case UIElement::MENU_SEL_BG:
-      gr_color(0, 106, 157, 255);
+      if (fastbootd_logo_enabled_)
+        gr_color(230, 115, 0, 255);
+      else
+        gr_color(51, 109, 255, 255);
       break;
     case UIElement::MENU_SEL_BG_ACTIVE:
       gr_color(0, 156, 100, 255);
@@ -740,12 +746,18 @@ void ScreenRecoveryUI::draw_menu_and_text_buffer_locked(
     const std::vector<std::string>& help_message) {
   int y = margin_height_;
 
-  if (fastbootd_logo_ && fastbootd_logo_enabled_) {
+  if (fastbootd_logo_ && custom_logo_) {
     // Try to get this centered on screen.
     auto width = gr_get_width(fastbootd_logo_.get());
     auto height = gr_get_height(fastbootd_logo_.get());
     auto centered_x = ScreenWidth() / 2 - width / 2;
-    DrawSurface(fastbootd_logo_.get(), 0, 0, width, height, centered_x, y);
+    if (fastbootd_logo_enabled_) {
+      // Draw 2by2 FastbootD Mode Logo
+      DrawSurface(fastbootd_logo_.get(), 0, 0, width, height, centered_x, y);
+    } else {
+      // Draw 2by2 Recovery Mode Logo
+      DrawSurface(custom_logo_.get(), 0, 0, width, height, centered_x, y);
+    }
     y += height;
   }
 
@@ -1081,6 +1093,8 @@ bool ScreenRecoveryUI::Init(const std::string& locale) {
   erasing_text_ = LoadLocalizedBitmap("erasing_text");
   no_command_text_ = LoadLocalizedBitmap("no_command_text");
   error_text_ = LoadLocalizedBitmap("error_text");
+
+  custom_logo_ = LoadBitmap("logo_image");
 
   if (android::base::GetBoolProperty("ro.boot.dynamic_partitions", false) ||
       android::base::GetBoolProperty("ro.fastbootd.available", false)) {
