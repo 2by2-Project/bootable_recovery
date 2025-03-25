@@ -37,9 +37,9 @@ static const std::vector<std::pair<std::string, Device::BuiltinAction>> kFastboo
 };
 
 void FillDefaultFastbootLines(std::vector<std::string>& title_lines) {
-  title_lines.push_back("YAAP Fastboot");
+  title_lines.push_back("2by2 Project Fastboot");
   title_lines.push_back("Product name - " + android::base::GetProperty("ro.product.device", ""));
-  title_lines.push_back("Build name - " + android::base::GetProperty("ro.yaap.version", ""));
+  title_lines.push_back("Build name - " + android::base::GetProperty("ro.2by2.version", ""));
   title_lines.push_back("Bootloader version - " + android::base::GetProperty("ro.bootloader", ""));
   title_lines.push_back("Baseband version - " +
                         android::base::GetProperty("ro.build.expect.baseband", ""));
