@@ -744,22 +744,22 @@ void ScreenRecoveryUI::draw_menu_and_text_buffer_locked(
     const std::vector<std::string>& help_message) {
   int y = margin_height_;
 
-  if (fastbootd_logo_ && custom_logo_) {
-    // Try to get this centered on screen.
-    auto width = gr_get_width(fastbootd_logo_.get());
-    auto height = gr_get_height(fastbootd_logo_.get());
-    auto centered_x = ScreenWidth() / 2 - width / 2;
-    if (fastbootd_logo_enabled_) {
-      // Draw 2by2 FastbootD Mode Logo
-      DrawSurface(fastbootd_logo_.get(), 0, 0, width, height, centered_x, y);
-    } else {
-      // Draw 2by2 Recovery Mode Logo
-      DrawSurface(custom_logo_.get(), 0, 0, width, height, centered_x, y);
-    }
-    y += height;
-  }
-
   if (menu_) {
+    if (fastbootd_logo_ && custom_logo_) {
+      // Try to get this centered on screen.
+      auto width = gr_get_width(fastbootd_logo_.get());
+      auto height = gr_get_height(fastbootd_logo_.get());
+      auto centered_x = ScreenWidth() / 2 - width / 2;
+      if (fastbootd_logo_enabled_) {
+        // Draw 2by2 FastbootD Mode Logo
+        DrawSurface(fastbootd_logo_.get(), 0, 0, width, height, centered_x, y);
+      } else {
+        // Draw 2by2 Recovery Mode Logo
+        DrawSurface(custom_logo_.get(), 0, 0, width, height, centered_x, y);
+      }
+      y += height;
+    }
+
     int x = margin_width_ + kMenuIndent;
 
     SetColor(UIElement::INFO);
